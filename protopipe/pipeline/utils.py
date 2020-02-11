@@ -216,6 +216,7 @@ def prod3b_array(fileName, site, array):
     subarrays_N = {  # La Palma has only 2 cameras
         "subarray_LSTs": sim_array.get_tel_ids_for_type("LST_LST_LSTCam"),
         "subarray_MSTs": sim_array.get_tel_ids_for_type("MST_MST_NectarCam"),
+        "MAGIC_LSTs": sim_array.tel_ids,
         "full_array": sim_array.tel_ids,
     }
     subarrays_S = {  # Paranal has only 3 cameras

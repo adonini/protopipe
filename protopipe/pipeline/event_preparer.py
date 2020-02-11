@@ -86,6 +86,7 @@ def camera_radius(camid_to_efl, cam_id="all"):
         "NectarCam": 4.05,
         "LSTCam": 2.31,
         "SCTCam": 4.0,  # dummy value
+        "MAGICCam": 1.75,
     }
 
     if cam_id in camid_to_efl.keys():
@@ -392,6 +393,7 @@ class EventPreparer:
                 "SST_1M_DigiCam": 0,
                 "SST_ASTRI_ASTRICam": 0,
                 "SST_GCT_CHEC": 0,
+                "MAGICCam": 0,
             }
             n_cluster_dict = {}
             impact_dict_reco = {}  # impact distance measured in tilt system
