@@ -241,6 +241,8 @@ def prod3b_array(fileName, site, array):
                     "\033[91m ERROR: Only 'full_array' supported for this production.\n\
                      Please, use that or define a custom array with a list of tel_ids.  \033[0m"
                 )
+            elif array == "MAGIC_LSTs":
+                return final_array_to_use(sim_array, array, subarrays_N)
             elif array == "full_array":
                 return final_array_to_use(sim_array, array, subarrays_N)
             elif (
