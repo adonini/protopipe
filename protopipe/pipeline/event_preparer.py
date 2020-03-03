@@ -59,7 +59,7 @@ PreparedEvent = namedtuple(
 from scipy.sparse.csgraph import connected_components
 
 
-def camera_radius(camid_to_efl, cam_id="all"):
+def camera_radius(cams_and_foclens, cam_id="all"):
     """
     Inspired from pywi-cta CTAMarsCriteria, CTA Mars like preselection cuts.
     This should be replaced by a function in ctapipe getting the radius either
@@ -89,17 +89,20 @@ def camera_radius(camid_to_efl, cam_id="all"):
         "MAGICCam": 1.75,
     }
 
-    if cam_id in camid_to_efl.keys():
-        foclen_meters = camid_to_efl[cam_id]
+    if cam_id in cams_and_foclens.keys():
+        foclen_meters = cams_and_foclens[cam_id]
+        print("foclen_meters1: ", foclen_meters)
         average_camera_radius_meters = (
             math.tan(math.radians(average_camera_radii_deg[cam_id])) * foclen_meters
         )
+        print("av_cam_rad1: ", average_camera_radius_meters)
     elif cam_id == "all":
         print("Available camera radii in meters:")
-        for cam_id in camid_to_efl.keys():
-            print(f"* {cam_id} : ", camera_radius(camid_to_efl, cam_id))
+        for cam_id in cams_and_foclens.keys():
+            print(f"* {cam_id} : ", camera_radius(cams_and_foclens, cam_id))
         average_camera_radius_meters = 0
     else:
+        print("ERRORRRRRRR")
         raise ValueError("Unknown camid", cam_id)
 
     return average_camera_radius_meters
@@ -258,7 +261,7 @@ class EventPreparer:
             cameras=cams_and_foclens.keys(),
             mode=mode,
         )
-
+        print("cameras1: ", cams_and_foclens.keys())
         # Cleaning for energy/score estimation
         # Add possibility to force energy/score cleaning with tailcut analysis
         force_mode = mode

@@ -165,14 +165,20 @@ def final_array_to_use(sim_array, array, subarrays=None):
     if subarrays:
         tel_ids = subarrays[array]
         subarray = sim_array.select_subarray("", tel_ids)
+        print("if: ", subarray, "*******", tel_ids)
     else:
         subarray = sim_array.select_subarray("", array)
         tel_ids = subarray.tel_ids
+        print("else ", subarray, "***** ", tel_ids)
     tel_types = subarray.telescope_types
+    print("tel_types: ", tel_types)
+    print("tel_ids: ", tel_ids)
     cams_and_foclens = {
         tel_types[i].camera.cam_id: tel_types[i].optics.equivalent_focal_length.value
         for i in range(len(tel_types))
     }
+    print("cams_and_foclens2: ", cams_and_foclens)
+    #print("subarrays: ", subarrays)
     return set(tel_ids), cams_and_foclens
 
 
@@ -242,6 +248,7 @@ def prod3b_array(fileName, site, array):
                      Please, use that or define a custom array with a list of tel_ids.  \033[0m"
                 )
             elif array == "MAGIC_LSTs":
+                #print("non baseline simulation")
                 return final_array_to_use(sim_array, array, subarrays_N)
             elif array == "full_array":
                 return final_array_to_use(sim_array, array, subarrays_N)
@@ -260,6 +267,10 @@ def prod3b_array(fileName, site, array):
                         "\033[91m ERROR: requested missing camera from simtel file. \033[0m"
                     )
                 else:
+                    #print("baseline simulation")
+                    #print("array: ", array)
+                    #print("sim_array: ", sim_array)
+                    #print("subarr_N: ", subarrays_N)
                     return final_array_to_use(sim_array, array, subarrays_N)
             elif type(array) == list:
                 if any((tel_id < 1 or tel_id > 19) for tel_id in array):
