@@ -1082,7 +1082,7 @@ class EventPreparer:
                 # Apply some selection
                 if self.image_cutflow.cut("min pixel", image_biggest):
                     continue
-
+                    
                 if self.image_cutflow.cut("min charge", np.sum(image_biggest)):
                     continue
 
@@ -1110,7 +1110,8 @@ class EventPreparer:
                         if self.image_cutflow.cut(
                             "close to the edge", moments_reco, camera.cam_id
                         ):
-                            continue
+                            #continue
+                            pass
 
                         if self.image_cutflow.cut("bad ellipticity", moments_reco):
                             continue
