@@ -779,6 +779,10 @@ class EventPreparer:
         npix_bounds = config["ImageSelection"]["pixel"]
         ellipticity_bounds = config["ImageSelection"]["ellipticity"]
         nominal_distance_bounds = config["ImageSelection"]["nominal_distance"]
+        
+        # Add quality cuts on truncated images
+        npix_bounds_truncated = config["TruncatedImages_Fit"]["ImageSelection"]["pixel_truncated"]
+        charge_bounds_truncated = config["TruncatedImages_Fit"]["ImageSelection"]["charge_truncated"]
 
         if debug:
             camera_radius(
@@ -804,13 +808,15 @@ class EventPreparer:
                         lambda m: (m.width / m.length) < ellipticity_bounds[0]
                         or (m.width / m.length) > ellipticity_bounds[-1],
                     ),
-                    # ("close to the edge", lambda m, cam_id: m.r.value > (nominal_distance_bounds[-1] * 1.12949101073069946))
-                    # in meter
                     (
                         "close to the edge",
                         lambda m, cam_id: m.r.value
                         > (nominal_distance_bounds[-1] * self.camera_radius[cam_id]),
                     ),  # in meter
+                    (
+                        "min pixel truncated", lambda s: np.count_nonzero(s) < npix_bounds_truncated[0]),
+                    (
+                        "min charge truncated", lambda x: x < charge_bounds_truncated[0]),
                 ]
             )
         )
@@ -1110,7 +1116,11 @@ class EventPreparer:
                         if self.image_cutflow.cut(
                             "close to the edge", moments_reco, camera.cam_id
                         ):
-                            continue
+                            if self.image_cutflow.cut("min pixel truncated", image_biggest):
+                                continue 
+                            if self.image_cutflow.cut("min charge truncated", np.sum(image_biggest)):
+                                continue
+                            pass 
 
                         if self.image_cutflow.cut("bad ellipticity", moments_reco):
                             continue
