@@ -222,7 +222,7 @@ def main():
         ) in preper.prepare_event(source, save_images=args.save_images):
 
             # Run
-             n_run=event.r0.obs_id
+            n_run=event.r0.obs_id
 
             # Angular quantities
             run_array_direction = event.mcheader.run_array_direction
